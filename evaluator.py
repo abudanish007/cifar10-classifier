@@ -5,7 +5,7 @@ class Evaluator:
     def __init__(self, model, criterion, device):
         self.model = model
         self.criterion = criterion
-        self.deice = device 
+        self.device = device 
         
     def evaluate(self, test_loader):
         self.model.eval()
@@ -15,7 +15,7 @@ class Evaluator:
         
         with torch.no_grad():
             for inputs, labels in tqdm(test_loader, desc= "Evaluating"):
-                inputs, labels = inputs.to(self.deice), labels.to(self.device)
+                inputs, labels = inputs.to(self.device), labels.to(self.device)
                 outputs = self.model(inputs)
                 loss = self.criterion(outputs,labels)
                 
