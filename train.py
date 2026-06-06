@@ -18,14 +18,14 @@ def main():
     
     train_loader, test_loader = get_dataloaders(config["data_dir"], config["batch_size"])
     
-    model = CNN(num_classes=config("num_classes")).to(device)
+    model = CNN(num_classes=config["num_classes"]).to(device)
     
     
-    criterion = nn.CrossEnropyLoss()
+    criterion = nn.CrossEntropyLoss()
     optimize = torch.optim.Adam(model.parameters(), lr = config["learning_rate"])
-    scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size = 5, gamma = 0.5)
+    scheduler = torch.optim.lr_scheduler.StepLR(optimize, step_size = 5, gamma = 0.5)
     
-    trainer = Trainer(mode, optimizer, criterion, device)
+    trainer = Trainer(model, optimize, criterion, device)
     evaluator = Evaluator(model, criterion, device)
     
     train_losses, test_losses = [],[]
@@ -35,13 +35,13 @@ def main():
     for epoch in range(config["num_epochs"]):
         print(f"\nEpoch {epoch+1}/{config['num_epochs']}")
         
-        train.loss, train_acc = trainer.train_rpoch(train_loader)
+        train_loss, train_acc = trainer.train_epoch(train_loader)
         test_loss, test_acc = evaluator.evaluate(test_loader)
         scheduler.step()
         
         train_losses.append(train_loss)
         test_losses.append(test_loss)
-        train_accs.append(train_acc)
+        train_acces.append(train_acc)
         test_accs.append(test_acc)
         
         print(f"Train Loss: {train_loss:.4f} | Train Acc: {train_acc:.2f}%")
@@ -54,7 +54,7 @@ def main():
             print(f"Model saved with accuracy: {best_acc:.2f}%")
 
     # Plot results
-    plot_metrics(train_losses, test_losses, train_accs, test_accs)
+    plot_metrics(train_losses, test_losses, train_acces, test_accs)
     print(f"\nTraining complete! Best accuracy: {best_acc:.2f}%")
 
 
