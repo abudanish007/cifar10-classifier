@@ -9,27 +9,27 @@ class CNN(nn.Module):
             #block 1
             nn.Conv2d(3,32,kernel_size=3, padding=1),
             nn.BatchNorm2d(32),
-            nn.ReLu(),
+            nn.ReLU(),
             nn.Conv2d(32,32,kernel_size = 3, padding=1),
             nn.BatchNorm2d(32),
-            nn.ReLu(),
+            nn.ReLU(),
             nn.MaxPool2d(2,2),
             nn.Dropout(0.25),
             
             #block 2
             nn.Conv2d(32,64,kernel_size=3, padding=1),
-            nn.BatchNor2d(64),
-            nn.ReLu(),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
             nn.Conv2d(64,64,kernel_size = 3, padding=1),
             nn.BatchNorm2d(64),
-            nn.ReLu(),
+            nn.ReLU(),
             nn.MaxPool2d(2,2),
             nn.Dropout(0.25),
         )
         
         self.classifier = nn.Sequential(
             nn.Linear(64*8*8, 512),
-            nn.ReLu(),
+            nn.ReLU(),
             nn.Dropout(0.5),
             nn.Linear(512, num_classes)
         )
